@@ -1,5 +1,3 @@
-'use strict';
-
 var Pools = require('../models/pools.js');
 
 function PoolsHandler () {

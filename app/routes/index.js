@@ -3,6 +3,7 @@
 var path = process.cwd();
 var ClickHandler = require(path + '/app/controllers/clickHandler.server.js');
 var PoolsHandler = require(path + '/app/controllers/poolsControllers.js');
+var UserHandler = require(path + '/app/controllers/userControllers.js');
 
 module.exports = function (app, passport) {
 
@@ -16,26 +17,27 @@ module.exports = function (app, passport) {
 
 	var clickHandler = new ClickHandler();
 	var poolsHandler = new PoolsHandler();
+	var userHandler = new UserHandler();
 
 	app.route('/')
-		.get(isLoggedIn, function (req, res) {
-			res.sendFile(path + '/public/index.html');
+		.get(function (req, res) {
+			res.sendFile(path + '/client/public/index.html');
 		});
 
 	app.route('/login')
 		.get(function (req, res) {
-			res.sendFile(path + '/public/login.html');
+			res.sendFile(path + '/client/public/login.html');
 		});
 
 	app.route('/logout')
 		.get(function (req, res) {
 			req.logout();
-			res.redirect('/login');
+			res.redirect('/');
 		});
 
 	app.route('/profile')
 		.get(isLoggedIn, function (req, res) {
-			res.sendFile(path + '/public/profile.html');
+			res.sendFile(path + '/client/public/profile.html');
 		});
 
 /*	app.route('/api/:id')
@@ -48,21 +50,25 @@ module.exports = function (app, passport) {
 
 	app.route('/auth/github/callback')
 		.get(passport.authenticate('github', {
-			successRedirect: '/api/user_pools',
+			successRedirect: '/',
 			failureRedirect: '/login'
 		}));
 
-	app.route('/api/:id/clicks')
+/*	app.route('/api/:id/clicks')
 		.get(isLoggedIn, clickHandler.getClicks)
 		.post(isLoggedIn, clickHandler.addClick)
 		.delete(isLoggedIn, clickHandler.resetClicks);
-
+*/
 // My route
+	app.route('/api/current_user')
+		.get(userHandler.getID)
+
 	app.route('/api/pools')
 		.get(poolsHandler.getPools)
 
 	app.route('/api/pools/:id')
 		.get(poolsHandler.getPool)
+
 	app.route('/api/pools/:id/:voteID')
 		.put(poolsHandler.votePool)
 
