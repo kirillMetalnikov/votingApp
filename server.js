@@ -20,7 +20,9 @@ app.use('/common', express.static(process.cwd() + '/app/common'));
 app.use(session({
 	secret: 'secretClementine',
 	resave: false,
-	saveUninitialized: true
+	saveUninitialized: true,
+	maxAge: 60000,
+	expires: 60000
 }));
 
 app.use(passport.initialize());
