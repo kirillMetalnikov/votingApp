@@ -7,7 +7,9 @@ import ListVotes from './ListVotes.js';
 import DashBoard from './DashBoard.js';
 import NewPoll from './NewPoll.js';
 import Login from './Login.js';
-import * as actions from '../actions';
+import VoteForm from './VoteForm.js';
+
+import {getCurrentUser} from '../actions';
 
 class App extends Component {
 
@@ -22,6 +24,7 @@ class App extends Component {
           <div>
             <Header/>
             <Route exact path='/' component={ListVotes} />
+            <Route exact path='/poll/:id' component={VoteForm} />
             <Route exact path='/dashboard' component={DashBoard} />
             <Route exact path='/new_poll' component={NewPoll} />
             <Route exact path='/login' component={Login} />
@@ -32,4 +35,4 @@ class App extends Component {
   }
 }
 
-export default connect(null, actions)(App);
+export default connect(null, {getCurrentUser})(App);

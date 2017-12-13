@@ -24,7 +24,7 @@ function PoolsHandler () {
 
 	this.votePool = function (req, res) {
 		Pools
-			.findOneAndUpdate({'_id': req.params.id, 'options': {$elemMatch:{'_id': req.params.voteID}}}, {$inc:{'options.$.votes': 1}} )
+			.findOneAndUpdate({'_id': req.params.id, 'options': {$elemMatch:{'_id': req.params.voteID}}}, {$inc:{'options.$.votes': 1}}, {new: true} )
 			.exec(function (err, result) {
 					if (err) { throw err; }
 	//				res.redirect('/api/pools/' + req.params.id);

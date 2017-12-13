@@ -202,3 +202,8 @@ span {
 	display: inline;
 	margin: 0;
 }
+
+/* my */
+.checked {
+  background-color: gray;
+}
