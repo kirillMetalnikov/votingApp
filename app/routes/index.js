@@ -24,11 +24,11 @@ module.exports = function (app, passport) {
 			res.sendFile(path + '/client/public/index.html');
 		});
 
-	app.route('/login')
+/*	app.route('/login')
 		.get(function (req, res) {
 			res.sendFile(path + '/client/public/login.html');
 		});
-
+*/
 	app.route('/logout')
 		.get(function (req, res) {
 			req.logout();

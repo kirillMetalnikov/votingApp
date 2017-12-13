@@ -5,6 +5,7 @@ var routes = require('./app/routes/index.js');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var session = require('express-session');
+var fallback = require('express-history-api-fallback');
 
 var app = express();
 require('dotenv').load();
@@ -18,6 +19,7 @@ app.use('/client', express.static(process.cwd() + '/client'));
 app.use('/public', express.static(process.cwd() + '/client/public'));
 app.use('/common', express.static(process.cwd() + '/app/common'));
 
+
 app.use(session({
 	secret: 'secretClementine',
 	resave: false,
@@ -30,6 +32,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 routes(app, passport);
+
+// 'falback' need for react-router withoout #
+app.use(fallback(process.cwd() + '/client/public/index.html'));
 
 var port = process.env.PORT || 8080;
 app.listen(port,  function () {

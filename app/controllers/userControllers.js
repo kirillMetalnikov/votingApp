@@ -2,8 +2,7 @@ var Users = require ('../models/users');
 
 function UserHandler() {
   this.getID = function (req, res) {
-    console.log(req.user)
-    if (req.user == undefined) {res.json({user: {_id: null}})
+    if (req.user == undefined) {res.json({user: false})
     } else {
       Users
         .findOne({_id: req.user._id})

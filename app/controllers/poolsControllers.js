@@ -44,7 +44,6 @@ function PoolsHandler () {
 	};
 
 	this.newPool = function(req, res) {
-//		console.log(req.user)
 		var newPool = new Pools();
 		newPool.question = "jskd";
 		newPool.owner = req.user ? req.user._id : "5a2e4527c2e25816dccc2338";

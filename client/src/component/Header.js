@@ -1,32 +1,37 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 
 class Header extends Component {
-
-  render () {
-    switch (this.props.user._id) {
+  render() {
+    switch (this.props.user) {
       case undefined:
         return (
           <ul>
-            <li>Home</li>
-          </ul>
-        )
-      case null:
+            <Link to='/'>Home</Link>
+          </ul>)
+      case false:
         return (
           <ul>
-            <li>Home</li>
-            <li><a href="/login">Login</a></li>
-          </ul>
-        )
+            <Link to='/'>Home</Link>
+            <li>
+              <a href="/login">Login</a>
+            </li>
+        </ul>)
       default:
-      return (
-        <ul>
-          <li>Home</li>
-          <li>Your polls</li>
-          <li><a href="/logout">Logout</a></li>
-        </ul>
-      )
+        return (
+          <ul>
+            <Link to='/'>Home</Link>
+            <Link to='/dashboard'>Your polls</Link>
+            <li>
+              <a href="/logout">Logout</a>
+            </li>
+        </ul>)
     }
   }
 }
 
-export default Header;
+function mapStateToProps({user}) {
+  return {user};
+}
+export default connect(mapStateToProps)(Header);
