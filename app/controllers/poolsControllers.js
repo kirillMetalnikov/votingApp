@@ -22,6 +22,17 @@ function PoolsHandler () {
 			);
 	};
 
+	this.deletePoll = function (req, res) {
+		console.log(req.params.id)
+		Pools
+			.findByIdAndRemove({ '_id': req.params.id})
+			.exec(function (err, result) {
+					if (err) { throw err; }
+					res.json(result);
+				}
+			);
+	};
+
 	this.votePool = function (req, res) {
 		Pools
 			.findOneAndUpdate({'_id': req.params.id, 'options': {$elemMatch:{'_id': req.params.voteID}}}, {$inc:{'options.$.votes': 1}}, {new: true} )

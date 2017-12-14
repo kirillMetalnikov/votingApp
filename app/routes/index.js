@@ -68,6 +68,7 @@ module.exports = function (app, passport) {
 
 	app.route('/api/pools/:id')
 		.get(poolsHandler.getPool)
+		.delete(poolsHandler.deletePoll)
 
 	app.route('/api/pools/:id/:voteID')
 		.put(poolsHandler.votePool)

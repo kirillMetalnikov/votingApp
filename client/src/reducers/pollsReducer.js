@@ -1,9 +1,9 @@
 
-import {GET_POOLS} from '../const.js';
+import {GET_POLLS} from '../const.js';
 
 export default function (state = [], action) {
   switch (action.type) {
-    case GET_POOLS:
+    case GET_POLLS:
       return action.polls;
     default:
       return state;

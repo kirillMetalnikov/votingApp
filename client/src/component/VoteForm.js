@@ -16,7 +16,7 @@ class VoteForm extends Component {
   }
 
   componentDidMount() {
-    var id = this.props.match.params.id;
+    var id = this.props.match ? this.props.match.params.id : this.props.id;
     this.props.getPoll(id);
   }
 
@@ -24,7 +24,7 @@ class VoteForm extends Component {
     e.preventDefault();
     var pollID = this.props.voteForm._id;
     var voteID = this.state.checked;
-    
+
     if (!voteID) return;
     this.props.submitPoll(pollID, voteID);
     this.setState({checked: null})
@@ -36,7 +36,11 @@ class VoteForm extends Component {
       this.setState({checked: id})
     }
   }
-
+  renderButton() {
+    var {user, voteForm}  = this.props;
+    if (!user) user = {_id: null};
+    if(user._id != voteForm.owner) return <button>Vote</button>
+  }
   renderOptions() {
     if(!this.props.voteForm) {
       return (<h3>Loading...</h3>);
@@ -57,7 +61,7 @@ class VoteForm extends Component {
               </div>
             )
           })}
-          <button>Vote</button>
+          {this.renderButton()}
         </form>
       </div>
     )
@@ -66,14 +70,13 @@ class VoteForm extends Component {
   render() {
     return (
       <div>
-        <h3>VoteForm</h3>
         {this.renderOptions()}
       </div>
     )
   }
 }
 
-const mapStateToProps = ({voteForm}) => {
-  return {voteForm};
+const mapStateToProps = ({voteForm, user}) => {
+  return {voteForm, user};
 }
 export default connect(mapStateToProps, {getPoll, submitPoll})(VoteForm);
