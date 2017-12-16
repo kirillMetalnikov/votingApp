@@ -31,7 +31,14 @@ class MyPolls extends Component {
     var {active} = this.state;
     return (
         polls.map( poll => {
-          if(poll._id == active) return (<VoteForm key = {poll._id} id={poll._id} />)
+          if(poll._id == active) {
+            return (
+              <div key = {poll._id} >
+                <VoteForm id={poll._id} />
+                <button onClick = {this.deleteHundler(poll._id)}>Delete</button>
+              </div>
+            )
+          }
           return (
             <div key = {poll._id} >
               <span onClick = {this.clickHundler(poll._id)}>{poll.question}</span>

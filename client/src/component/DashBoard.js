@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 
 import NewPoll from './NewPoll';
 import MyPolls from './MyPolls';
+import {setIsNewPoll} from '../actions'
 
 class DashBoard extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isNewPoll: false
-    }
+//    this.state = {
+//      isNewPoll: false
+//    }
 
     this.handleClickMyPolls = this.handleClickMyPolls.bind(this);
     this.handleClickNew = this.handleClickNew.bind(this);
@@ -17,16 +19,18 @@ class DashBoard extends Component {
 
   handleClickMyPolls(e) {
     e.preventDefault();
-    this.setState({isNewPoll: false});
+    this.props.setIsNewPoll(false);
+//    this.setState({isNewPoll: false});
   }
 
   handleClickNew(e) {
     e.preventDefault();
-    this.setState({isNewPoll: true});
+    this.props.setIsNewPoll(true);
+//    this.setState({isNewPoll: true});
   }
 
   renderModule() {
-    if(this.state.isNewPoll) return (<NewPoll/>);
+    if(this.props.isNewPoll) return (<NewPoll/>);
     return (<MyPolls/>);
   }
 
@@ -42,4 +46,8 @@ class DashBoard extends Component {
   }
 };
 
-export default DashBoard;
+const mapStateToProps = ({isNewPoll}) => {
+  return {isNewPoll};
+}
+
+export default connect(mapStateToProps, {setIsNewPoll})(DashBoard);

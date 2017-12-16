@@ -56,9 +56,11 @@ function PoolsHandler () {
 
 	this.newPool = function(req, res) {
 		var newPool = new Pools();
-		newPool.question = "jskd";
+		var {options, name} = req.body;
+
+		newPool.question = name;
 		newPool.owner = req.user ? req.user._id : "5a2e4527c2e25816dccc2338";
-		newPool.options = [{option: "12322"}, {option: "124445"}];
+		newPool.options = options.map( option => {return {option}});
 
 		newPool.save(function (err) {
 			if (err) {

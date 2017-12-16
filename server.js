@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var session = require('express-session');
 var fallback = require('express-history-api-fallback');
+var bodyParser = require('body-parser');
 
 var app = express();
 require('dotenv').load();
@@ -13,6 +14,8 @@ require('./app/config/passport')(passport);
 
 mongoose.connect(process.env.MONGO_URI);
 mongoose.Promise = global.Promise;
+
+app.use(bodyParser.json());
 
 app.use('/controllers', express.static(process.cwd() + '/app/controllers'));
 app.use('/client', express.static(process.cwd() + '/client'));

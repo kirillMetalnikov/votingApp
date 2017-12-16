@@ -207,3 +207,10 @@ span {
 .checked {
   background-color: gray;
 }
+
+.modal {
+  width: 40%;
+  position: absolute;
+  left: 20%;
+  top: 10%;
+}
