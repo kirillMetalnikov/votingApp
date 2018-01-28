@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import {getPoll, submitPoll} from '../actions';
+import Graph from './Graph'
 
 class VoteForm extends Component {
   constructor(props) {
@@ -63,6 +64,7 @@ class VoteForm extends Component {
           })}
           {this.renderButton()}
         </form>
+        <Graph width = {500} height = {300}/>
       </div>
     )
   }

@@ -31,7 +31,6 @@ class DashBoard extends Component {
 
   renderModule() {
     if(this.props.isNewPoll) return (<NewPoll/>);
-    return (<MyPolls/>);
   }
 
   render() {
@@ -40,6 +39,7 @@ class DashBoard extends Component {
         <h3>DashBoard</h3>
         <button onClick = {this.handleClickMyPolls} >My polls</button>
         <button onClick = {this.handleClickNew} >New</button>
+        <MyPolls/>
         {this.renderModule()}
       </div>
     )

@@ -15,6 +15,7 @@ export const getPolls = () => dispatch => {
 }
 
 export const getPoll = (id) => dispatch => {
+  dispatch({type: GET_VOTE_FORM, voteForm: null});
   axios.get('/api/pools/'+ id).then(res => {
     dispatch({type: GET_VOTE_FORM, voteForm: res.data});
   })
