@@ -37440,64 +37440,74 @@ var Graph = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Graph.__proto__ || Object.getPrototypeOf(Graph)).call(this, props));
 
-    _this.renderGraph = _this.renderGraph.bind(_this);
+    _this.renderPie = _this.renderPie.bind(_this);
+    _this.color = d3.scaleOrdinal(d3.schemeCategory10).bind(_this);
     return _this;
   }
 
   _createClass(Graph, [{
-    key: 'renderGraph',
-    value: function renderGraph() {
-      if (!this.props.voteForm) {
-        console.log("loading");
-        return;
-      };
-      console.log('graph');
-      console.log(this.props.voteForm);
+    key: 'renderPie',
+    value: function renderPie(outerRadius, innerRadius) {
+      var _this2 = this;
 
-      var target = this.refs.target;
+      var options = this.props.voteForm.options;
+
+
+      var pie = d3.pie().value(function (d) {
+        return d.votes;
+      }).sort(null);
+      var path = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
+
+      return pie(options).map(function (partPie, index) {
+        return _react2.default.createElement('path', { key: 'pie' + index, d: path(partPie), fill: _this2.color(index) });
+      });
+    }
+  }, {
+    key: 'renderLabels',
+    value: function renderLabels() {
+      var _this3 = this;
+
+      var options = this.props.voteForm.options;
+
+
+      return options.map(function (option, index) {
+        return _react2.default.createElement(
+          'g',
+          { key: "option" + index, transform: 'translate(' + 5 + ', ' + index * 20 + ')' },
+          _react2.default.createElement('rect', { x: 0, y: 0, width: 10, height: 10, fill: _this3.color(index) }),
+          _react2.default.createElement(
+            'text',
+            { x: 20, y: 10 },
+            option.option
+          )
+        );
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
       var _props = this.props,
           width = _props.width,
           height = _props.height;
       var options = this.props.voteForm.options;
 
-      var outerRadius = height / 2;
-      var innerRadius = 0;
 
-      var color = d3.scaleOrdinal(d3.schemeCategory10);
+      var transformPie = 'translate(' + height / 2 + ', ' + height / 2 + ')';
+      var transformLabels = 'translate(' + (height + 20) + ', ' + (height - options.length * 20 - 10) + ')';
 
-      var pie = d3.pie().value(function (d) {
-        return d.votes;
-      }).sort(null);
-
-      var path = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
-
-      var svg = d3.select(target).append('svg').attr('height', height).attr('width', width);
-
-      var g = svg.append("g").attr("transform", 'translate(' + (width - outerRadius) + ', ' + height / 2 + ')');
-
-      var arc = g.selectAll(".arc").data(pie(options)).enter().append("g").attr("class", "arc");
-
-      arc.append("path").attr("d", path).attr("fill", function (d, i) {
-        return color(i);
-      });
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this.renderGraph();
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      this.renderGraph();
-    }
-  }, {
-    key: 'render',
-    value: function render() {
       return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement('div', { ref: 'target' })
+        'svg',
+        { width: width, height: height, id: 'graph' },
+        _react2.default.createElement(
+          'g',
+          { transform: transformPie },
+          this.renderPie(height / 2, 0)
+        ),
+        _react2.default.createElement(
+          'g',
+          { transform: transformLabels },
+          this.renderLabels()
+        )
       );
     }
   }]);

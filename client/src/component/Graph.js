@@ -5,67 +5,58 @@ import * as d3 from 'd3';
 class Graph extends Component {
   constructor(props) {
     super(props);
-    this.renderGraph = this.renderGraph.bind(this)
+    this.renderPie = this.renderPie.bind(this);
+    this.color = d3.scaleOrdinal(d3.schemeCategory10).bind(this);
   }
 
-  renderGraph() {
-    if (!this.props.voteForm) {
-      console.log("loading");
-      return;
-    };
-    console.log('graph');
-    console.log(this.props.voteForm);
-
-    var {target} = this.refs;
-    var {width, height} = this.props;
+  renderPie(outerRadius, innerRadius) {
     var {options} = this.props.voteForm;
-    var outerRadius = height / 2;
-    var innerRadius = 0;
 
-
-    var color = d3.scaleOrdinal(d3.schemeCategory10);
-
-    var pie = d3.pie()
+    const pie = d3.pie()
       .value( d => d.votes)
       .sort(null)
-
-    var path = d3.arc()
+    const path = d3.arc()
       .outerRadius(outerRadius)
       .innerRadius(innerRadius);
 
-    var svg = d3.select(target)
-      .append('svg')
-      .attr('height', height)
-      .attr('width', width)
-
-    var g = svg
-      .append("g")
-      .attr("transform", `translate(${width - outerRadius}, ${height / 2})`);
-
-    var arc = g.selectAll(".arc")
-      .data(pie(options))
-      .enter()
-      .append("g")
-      .attr("class", "arc");
-
-    arc.append("path")
-      .attr("d", path)
-      .attr("fill", (d, i) => color(i) );
+    return (
+      pie(options).map( (partPie, index) => {
+        return <path key = {'pie' + index} d = {path(partPie)} fill = {this.color(index)} />
+      })
+    )
   }
 
-  componentDidMount() {
-    this.renderGraph();
-  }
+  renderLabels() {
+    var {options} = this.props.voteForm;
 
-  componentDidUpdate() {
-    this.renderGraph();
+    return (
+      options.map( (option, index) => {
+        return (
+          <g key = {"option" + index} transform = {`translate(${5}, ${index * 20})`}>
+            <rect x = {0} y = {0} width = {10} height = {10} fill = {this.color(index)} />
+            <text  x = {20} y = {10} >{option.option}</text>
+          </g>
+        )
+      })
+    )
   }
 
   render () {
+    var {width, height} = this.props;
+    var {options} = this.props.voteForm
+
+    var transformPie = `translate(${height / 2}, ${height / 2})`;
+    var transformLabels = `translate(${height + 20}, ${height - options.length * 20 - 10})`
+
     return (
-      <div>
-        <div ref='target' />
-      </div>
+      <svg width={width} height={height} id='graph'>
+        <g transform = {transformPie}>
+          {this.renderPie(height / 2, 0)}
+        </g>
+        <g transform = {transformLabels}>
+          {this.renderLabels()}
+        </g>
+      </svg>
     )
   }
 }
