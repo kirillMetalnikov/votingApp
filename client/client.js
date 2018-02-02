@@ -37440,15 +37440,50 @@ var Graph = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Graph.__proto__ || Object.getPrototypeOf(Graph)).call(this, props));
 
+    _this.state = { hover: null };
+
     _this.renderPie = _this.renderPie.bind(_this);
     _this.color = d3.scaleOrdinal(d3.schemeCategory10).bind(_this);
     return _this;
   }
 
   _createClass(Graph, [{
+    key: 'hover',
+    value: function hover(option, votes, transform) {
+      var text = option + ': ' + votes;
+      return _react2.default.createElement(
+        'g',
+        { transform: 'translate(' + transform + ')', pointerEvents: 'none' },
+        _react2.default.createElement('rect', { x: -10 * text.length / 2, y: -18, rx: '4', ry: '4', width: 10 * text.length, height: 24, fill: 'gray', opacity: '0.7' }),
+        _react2.default.createElement(
+          'text',
+          { x: -8 * text.length / 2, y: '0', fill: 'white' },
+          text
+        )
+      );
+    }
+  }, {
+    key: 'setHover',
+    value: function setHover(index) {
+      var _this2 = this;
+
+      return function () {
+        return _this2.setState({ hover: index });
+      };
+    }
+  }, {
+    key: 'deleteHover',
+    value: function deleteHover() {
+      var _this3 = this;
+
+      return function () {
+        return _this3.setState({ hover: null });
+      };
+    }
+  }, {
     key: 'renderPie',
     value: function renderPie(outerRadius, innerRadius) {
-      var _this2 = this;
+      var _this4 = this;
 
       var options = this.props.voteForm.options;
 
@@ -37457,15 +37492,25 @@ var Graph = function (_Component) {
         return d.votes;
       }).sort(null);
       var path = d3.arc().outerRadius(outerRadius).innerRadius(innerRadius);
+      var label = d3.arc().outerRadius(outerRadius + 50).innerRadius(innerRadius);
 
       return pie(options).map(function (partPie, index) {
-        return _react2.default.createElement('path', { key: 'pie' + index, d: path(partPie), fill: _this2.color(index) });
+        var _partPie$data = partPie.data,
+            option = _partPie$data.option,
+            votes = _partPie$data.votes;
+
+        return _react2.default.createElement(
+          'g',
+          { key: 'pie' + index, onMouseOver: _this4.setHover(index), onMouseOut: _this4.deleteHover() },
+          _react2.default.createElement('path', { d: path(partPie), fill: _this4.color(index) }),
+          _this4.state.hover == index && _this4.hover(option, votes, label.centroid(partPie))
+        );
       });
     }
   }, {
     key: 'renderLabels',
     value: function renderLabels() {
-      var _this3 = this;
+      var _this5 = this;
 
       var options = this.props.voteForm.options;
 
@@ -37474,7 +37519,7 @@ var Graph = function (_Component) {
         return _react2.default.createElement(
           'g',
           { key: "option" + index, transform: 'translate(' + 5 + ', ' + index * 20 + ')' },
-          _react2.default.createElement('rect', { x: 0, y: 0, width: 10, height: 10, fill: _this3.color(index) }),
+          _react2.default.createElement('rect', { x: 0, y: 0, width: 10, height: 10, fill: _this5.color(index) }),
           _react2.default.createElement(
             'text',
             { x: 20, y: 10 },
