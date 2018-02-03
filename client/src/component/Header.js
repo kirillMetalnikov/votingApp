@@ -1,32 +1,60 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
+import {Navbar, Nav, NavItem} from 'react-bootstrap'
 
 class Header extends Component {
   render() {
     switch (this.props.user) {
       case undefined:
         return (
-          <ul>
-            <Link to='/'>Home</Link>
-          </ul>)
+          <Navbar>
+            <Nav>
+              <NavItem>
+                <Link to='/'>
+                  Home
+                </Link>
+              </NavItem>
+            </Nav>
+          </Navbar>)
       case false:
         return (
-          <ul>
-            <Link to='/'>Home</Link>
-            <li>
-              <a href="/login">Login</a>
-            </li>
-        </ul>)
+          <Navbar>
+            <Nav>
+              <NavItem>
+                <Link to='/'>
+                  Home
+                </Link>
+              </NavItem>
+            </Nav>
+            <Nav pullRight>
+              <NavItem href="/login">
+                Login
+              </NavItem>
+            </Nav>
+
+        </Navbar>)
       default:
         return (
-          <ul>
-            <Link to='/'>Home</Link>
-            <Link to='/dashboard'>Your polls</Link>
-            <li>
-              <a href="/logout">Logout</a>
-            </li>
-        </ul>)
+          <Navbar>
+            <Nav>
+              <NavItem>
+                <Link to='/'>
+                  Home
+                </Link>
+              </NavItem>
+              <NavItem>
+                <Link to='/dashboard'>
+                  Your polls
+                </Link>
+              </NavItem>
+            </Nav>
+            <Nav pullRight>
+              <NavItem href="/logout">
+                Logout
+              </NavItem>
+            </Nav>
+        </Navbar>)
     }
   }
 }

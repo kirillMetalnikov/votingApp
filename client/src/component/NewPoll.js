@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {Modal, Button, FormGroup, FormControl, ControlLabel, HelpBlock, InputGroup, Glyphicon} from 'react-bootstrap';
 
 import {addPoll} from '../actions';
 import {setIsNewPoll} from '../actions';
@@ -49,17 +50,14 @@ class NewPoll extends Component {
     var {options, name} = this.state;
     this.props.setIsNewPoll(false);
     this.props.addPoll({name, options});
-
-  }
-  handleCancel(e) {
-    e.preventDefault();
-    this.props.setIsNewPoll(false);
+    this.setState({options: ["", ""], name: ""});
   }
 
   renderDeleteButton(index) {
     if (this.state.options.length > 2) {
-      return <button onClick = {this.handleDeleteOption(index)}>Delete</button>
+      return <InputGroup.Addon onClick = {this.handleDeleteOption(index)}><Glyphicon glyph="minus" /></InputGroup.Addon>
     }
+    return <InputGroup.Addon />
   }
 
   renderOptions() {
@@ -69,30 +67,57 @@ class NewPoll extends Component {
     // ANd will start truble (with focus....)
     return options.map ( (option, index) => {
       return (
-          <div key={option + index}>
-            <input defaultValue = {option} required placeholder = {"Option " + (index + 1)} onBlur = {this.handleChangeOption(index)}/>
-            {this.renderDeleteButton(index)}
-          </div>
+        <InputGroup key={option + index}>
+          <FormControl
+            type="text"
+            required={true}
+            placeholder = {"Option " + (index + 1)}
+            defaultValue = {option}
+            onBlur = {this.handleChangeOption(index)}
+          />
+          {this.renderDeleteButton(index)}
+        </InputGroup>
       )
     })
   }
 
   render() {
     return (
-      <div className = "modal">
-        <h3>New poll</h3>
-        <form onSubmit = {this.handleSubmit.bind(this)}>
-          <input required placeholder = "Question?" onBlur = {this.handleChangeQuestion.bind(this)}/>
-          {this.renderOptions()}
-          <button onClick={this.handleAddOption}>Add</button>
-          <button type ="submit">Save</button>
-          <button onClick={this.handleCancel.bind(this)}> Cancel</button>
-        </form>
-
-      </div>
-
+          <Modal show = {this.props.isNewPoll}  onHide = {() => this.props.setIsNewPoll(false)}>
+            <form onSubmit = {this.handleSubmit.bind(this)}>
+              <Modal.Header closeButton>
+                <Modal.Title>New poll</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <FormGroup>
+                  <ControlLabel>Question</ControlLabel>
+                  <FormControl
+                    type="text"
+                    required={true}
+                    placeholder="Enter question"
+                    onBlur = {this.handleChangeQuestion.bind(this)}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <ControlLabel>Options</ControlLabel>
+                  {this.renderOptions()}
+                  <InputGroup>
+                    <InputGroup.Addon bsSize="xsmall" onClick = {this.handleAddOption}><Glyphicon glyph="plus" /></InputGroup.Addon>
+                  </InputGroup>
+                </FormGroup>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button type ="submit" bsStyle="primary">Save</Button>
+                <Button  onClick={() => this.props.setIsNewPoll(false)}> Cancel</Button >
+              </Modal.Footer>
+            </form>
+          </Modal>
     )
   }
 };
 
-export default connect(null, {addPoll, setIsNewPoll})(NewPoll);
+const mapStateToProps = ({isNewPoll}) => {
+  return {isNewPoll};
+}
+
+export default connect(mapStateToProps, {addPoll, setIsNewPoll})(NewPoll);

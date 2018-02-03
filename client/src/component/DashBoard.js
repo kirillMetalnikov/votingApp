@@ -8,29 +8,19 @@ import {setIsNewPoll} from '../actions'
 class DashBoard extends Component {
   constructor(props) {
     super(props);
-//    this.state = {
-//      isNewPoll: false
-//    }
 
     this.handleClickMyPolls = this.handleClickMyPolls.bind(this);
     this.handleClickNew = this.handleClickNew.bind(this);
-    this.renderModule = this.renderModule.bind(this);
   }
 
   handleClickMyPolls(e) {
     e.preventDefault();
     this.props.setIsNewPoll(false);
-//    this.setState({isNewPoll: false});
   }
 
   handleClickNew(e) {
     e.preventDefault();
     this.props.setIsNewPoll(true);
-//    this.setState({isNewPoll: true});
-  }
-
-  renderModule() {
-    if(this.props.isNewPoll) return (<NewPoll/>);
   }
 
   render() {
@@ -40,14 +30,10 @@ class DashBoard extends Component {
         <button onClick = {this.handleClickMyPolls} >My polls</button>
         <button onClick = {this.handleClickNew} >New</button>
         <MyPolls/>
-        {this.renderModule()}
+        <NewPoll/>
       </div>
     )
   }
 };
 
-const mapStateToProps = ({isNewPoll}) => {
-  return {isNewPoll};
-}
-
-export default connect(mapStateToProps, {setIsNewPoll})(DashBoard);
+export default connect(null, {setIsNewPoll})(DashBoard);

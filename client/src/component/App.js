@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {BrowserRouter, Route, HashRouter} from 'react-router-dom'
 import { connect } from 'react-redux';
+import {Grid, Row} from 'react-bootstrap';
 
 import Header from './Header.js';
 import ListVotes from './ListVotes.js';
@@ -19,10 +20,12 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <Grid>
         <BrowserRouter>
           <div>
-            <Header/>
+            <Row>
+              <Header/>
+            </Row>
             <Route exact path='/' component={ListVotes} />
             <Route exact path='/poll/:id' component={VoteForm} />
             <Route exact path='/dashboard' component={DashBoard} />
@@ -30,7 +33,7 @@ class App extends Component {
             <Route exact path='/login' component={Login} />
           </div>
         </BrowserRouter>
-      </div>
+      </Grid>
     )
   }
 }
