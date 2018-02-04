@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Row, PageHeader, Button} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
 
 import NewPoll from './NewPoll';
 import MyPolls from './MyPolls';
@@ -19,6 +20,13 @@ class DashBoard extends Component {
   }
 
   render() {
+    if (!this.props.user) return (
+      <Row>
+        <PageHeader>Your pools</PageHeader>
+        To see this page your need <Link to = '/login'>login</Link>!
+      </Row>
+    )
+
     return (
       <Row>
         <PageHeader>Your pools</PageHeader>
@@ -30,4 +38,9 @@ class DashBoard extends Component {
   }
 };
 
-export default connect(null, {setIsNewPoll})(DashBoard);
+
+const mapStateToProps = ({user}) => {
+  return {user};
+}
+
+export default connect(mapStateToProps, {setIsNewPoll})(DashBoard);
