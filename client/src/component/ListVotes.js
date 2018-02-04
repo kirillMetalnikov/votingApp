@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom';
+import {Row, PageHeader, ListGroup, ListGroupItem} from 'react-bootstrap';
 
 import {getPolls} from '../actions';
 
@@ -13,9 +14,9 @@ class ListVotes extends Component {
     return (
         polls.map( poll => {
           return (
-            <div key = {poll._id} >
+            <ListGroupItem key = {poll._id} >
               <Link to={"/poll/" + poll._id}>{poll.question}</Link>
-            </div>
+            </ListGroupItem>
           )
         })
     )
@@ -23,10 +24,12 @@ class ListVotes extends Component {
 
   render () {
     return (
-      <div>
-        <h3>ListVotes</h3>
-        {this.renderList()}
-      </div>
+      <Row>
+        <PageHeader>List of votes</PageHeader>
+        <ListGroup>
+          {this.renderList()}
+        </ListGroup>
+      </Row>
     )
   }
 }

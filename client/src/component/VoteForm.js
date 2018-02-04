@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {PageHeader, Panel, ListGroup, ListGroupItem, Button} from 'react-bootstrap'
 
 import {getPoll, submitPoll} from '../actions';
 import Graph from './Graph'
@@ -40,32 +41,56 @@ class VoteForm extends Component {
   renderButton() {
     var {user, voteForm}  = this.props;
     if (!user) user = {_id: null};
-    if(user._id != voteForm.owner) return <button>Vote</button>
+    if(user._id != voteForm.owner) return <Button type ="submit" bsStyle="primary">Vote</Button>
   }
+
+  renderDeleteButton() {
+    if(this.props.delete) return (
+      <Button className="pull-right" onClick = {this.props.delete}>Delete</Button>
+    )
+  }
+
+  renderGraph() {
+    var sumVotes = this.props.voteForm.options.reduce( (sum, option) => {
+      return sum + option.votes
+    }, 0)
+
+    if (sumVotes == 0) return null;
+
+    return (
+      <Graph width = {"100%"} height = {300}/>
+    )
+  }
+
   renderOptions() {
     if(!this.props.voteForm) {
       return (<h3>Loading...</h3>);
     };
 
     return(
-      <div>
-        <h3>{this.props.voteForm.question}</h3>
-        <form onSubmit={this.handleSubmit}>
-          {this.props.voteForm.options.map( option => {
-            return (
-              <div
-                key={option._id}
-                onClick = {this.handleCheck(option._id)}
-                className = {this.state.checked == option._id ? "checked" : ""}
-              >
-                {option.option}: {option.votes}
-              </div>
-            )
-          })}
-          {this.renderButton()}
-        </form>
-        <Graph width = {500} height = {300}/>
-      </div>
+      <Panel>
+        <Panel.Heading><Panel.Title>{this.props.voteForm.question}</Panel.Title></Panel.Heading>
+        <Panel.Body>
+          <form onSubmit={this.handleSubmit}>
+            <ListGroup>
+              {this.props.voteForm.options.map( option => {
+                return (
+                  <ListGroupItem
+                    key={option._id}
+                    onClick = {this.handleCheck(option._id)}
+                    active = {this.state.checked == option._id && ( this.props.user ? this.props.user._id != this.props.voteForm.owner : true)}
+                  >
+                    {option.option}: <span className="pull-right"><strong>{option.votes}</strong></span>
+                  </ListGroupItem>
+                )
+              })}
+            </ListGroup>
+            {this.renderButton()}
+          </form>
+          {this.renderGraph()}
+          {this.renderDeleteButton()}
+        </Panel.Body>
+      </Panel>
     )
   }
 

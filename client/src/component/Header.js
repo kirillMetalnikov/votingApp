@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {Navbar, Nav, NavItem} from 'react-bootstrap'
+import {IndexLinkContainer, LinkContainer} from 'react-router-bootstrap'
 
 class Header extends Component {
   render() {
@@ -10,22 +11,22 @@ class Header extends Component {
         return (
           <Navbar>
             <Nav>
-              <NavItem>
-                <Link to='/'>
-                  Home
-                </Link>
-              </NavItem>
+              <IndexLinkContainer to='/'>
+                <NavItem>
+                Home
+                </NavItem>
+              </IndexLinkContainer>
             </Nav>
           </Navbar>)
       case false:
         return (
           <Navbar>
             <Nav>
-              <NavItem>
-                <Link to='/'>
-                  Home
-                </Link>
-              </NavItem>
+              <IndexLinkContainer to='/'>
+                <NavItem>
+                Home
+                </NavItem>
+              </IndexLinkContainer>
             </Nav>
             <Nav pullRight>
               <NavItem href="/login">
@@ -38,16 +39,16 @@ class Header extends Component {
         return (
           <Navbar>
             <Nav>
-              <NavItem>
-                <Link to='/'>
-                  Home
-                </Link>
-              </NavItem>
-              <NavItem>
-                <Link to='/dashboard'>
-                  Your polls
-                </Link>
-              </NavItem>
+              <IndexLinkContainer to='/'>
+                <NavItem>
+                Home
+                </NavItem>
+              </IndexLinkContainer>
+              <IndexLinkContainer to='/dashboard'>
+                <NavItem>
+                Your polls
+                </NavItem>
+              </IndexLinkContainer>
             </Nav>
             <Nav pullRight>
               <NavItem href="/logout">
@@ -62,4 +63,6 @@ class Header extends Component {
 function mapStateToProps({user}) {
   return {user};
 }
-export default connect(mapStateToProps)(Header);
+
+// without {pure: false} an active link don't work
+export default connect(mapStateToProps, null, null, {pure: false})(Header);

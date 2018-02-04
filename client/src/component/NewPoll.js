@@ -10,6 +10,7 @@ class NewPoll extends Component {
     super(props);
     this.state = {options: ["", ""], name: ""};
     this.handleAddOption = this.handleAddOption.bind(this);
+    this.handleCancel = this.handleCancel.bind(this)
   }
 
   handleDeleteOption(index) {
@@ -53,6 +54,11 @@ class NewPoll extends Component {
     this.setState({options: ["", ""], name: ""});
   }
 
+  handleCancel() {
+    this.setState({options: ["", ""], name: ""});
+    this.props.setIsNewPoll(false);
+  }
+
   renderDeleteButton(index) {
     if (this.state.options.length > 2) {
       return <InputGroup.Addon onClick = {this.handleDeleteOption(index)}><Glyphicon glyph="minus" /></InputGroup.Addon>
@@ -81,9 +87,18 @@ class NewPoll extends Component {
     })
   }
 
+  renderAddOption() {
+    if (this.state.options.length >= 10) return null;
+    return (
+      <InputGroup>
+        <InputGroup.Addon onClick = {this.handleAddOption}><Glyphicon glyph="plus" /></InputGroup.Addon>
+      </InputGroup>
+    )
+  }
+
   render() {
     return (
-          <Modal show = {this.props.isNewPoll}  onHide = {() => this.props.setIsNewPoll(false)}>
+          <Modal show = {this.props.isNewPoll}  onHide = {this.handleCancel}>
             <form onSubmit = {this.handleSubmit.bind(this)}>
               <Modal.Header closeButton>
                 <Modal.Title>New poll</Modal.Title>
@@ -99,16 +114,14 @@ class NewPoll extends Component {
                   />
                 </FormGroup>
                 <FormGroup>
-                  <ControlLabel>Options</ControlLabel>
+                  <ControlLabel>Options of answer</ControlLabel>
                   {this.renderOptions()}
-                  <InputGroup>
-                    <InputGroup.Addon bsSize="xsmall" onClick = {this.handleAddOption}><Glyphicon glyph="plus" /></InputGroup.Addon>
-                  </InputGroup>
+                  {this.renderAddOption()}
                 </FormGroup>
               </Modal.Body>
               <Modal.Footer>
                 <Button type ="submit" bsStyle="primary">Save</Button>
-                <Button  onClick={() => this.props.setIsNewPoll(false)}> Cancel</Button >
+                <Button  onClick={this.handleCancel}> Cancel</Button >
               </Modal.Footer>
             </form>
           </Modal>

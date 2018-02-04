@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {Row, PageHeader, Button} from 'react-bootstrap';
 
 import NewPoll from './NewPoll';
 import MyPolls from './MyPolls';
@@ -9,13 +10,7 @@ class DashBoard extends Component {
   constructor(props) {
     super(props);
 
-    this.handleClickMyPolls = this.handleClickMyPolls.bind(this);
     this.handleClickNew = this.handleClickNew.bind(this);
-  }
-
-  handleClickMyPolls(e) {
-    e.preventDefault();
-    this.props.setIsNewPoll(false);
   }
 
   handleClickNew(e) {
@@ -25,13 +20,12 @@ class DashBoard extends Component {
 
   render() {
     return (
-      <div>
-        <h3>DashBoard</h3>
-        <button onClick = {this.handleClickMyPolls} >My polls</button>
-        <button onClick = {this.handleClickNew} >New</button>
+      <Row>
+        <PageHeader>Your pools</PageHeader>
         <MyPolls/>
         <NewPoll/>
-      </div>
+        <Button onClick = {this.handleClickNew} >New</Button>
+      </Row>
     )
   }
 };

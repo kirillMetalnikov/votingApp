@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
+import {Row, PageHeader, ListGroup, ListGroupItem, Button} from 'react-bootstrap';
 
 import {userPolls, deletePoll} from '../actions';
 import VoteForm from './VoteForm.js';
@@ -33,17 +34,14 @@ class MyPolls extends Component {
         polls.map( poll => {
           if(poll._id == active) {
             return (
-              <div key = {poll._id} >
-                <VoteForm id={poll._id} />
-                <button onClick = {this.deleteHundler(poll._id)}>Delete</button>
-              </div>
+              <VoteForm key = {poll._id}  id={poll._id} delete = {this.deleteHundler(poll._id)}/>
             )
           }
           return (
-            <div key = {poll._id} >
+            <ListGroupItem  key = {poll._id} >
               <span onClick = {this.clickHundler(poll._id)}>{poll.question}</span>
-              <button onClick = {this.deleteHundler(poll._id)}>Delete</button>
-            </div>
+              <Button className="pull-right" bsSize="xsmall" onClick = {this.deleteHundler(poll._id)}>Delete</Button>
+            </ListGroupItem >
           )
         })
     )
@@ -51,10 +49,9 @@ class MyPolls extends Component {
 
   render(){
     return(
-      <div>
-        <h3>YourVotes</h3>
-        {this.renderList()}
-      </div>
+        <ListGroup>
+          {this.renderList()}
+        </ListGroup>
     )
   }
 }
