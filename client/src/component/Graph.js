@@ -1,47 +1,29 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import * as d3 from 'd3';
-import {Tooltip} from 'react-bootstrap';
+import {Tooltip, Popover, Overlay} from 'react-bootstrap';
 
-class Graph extends Component {
+class Pie extends Component {
   constructor(props) {
-    super(props);
-    this.state = {hover: {index: null}};
-
-    this.renderPie = this.renderPie.bind(this);
-    this.color = d3.scaleOrdinal(d3.schemeCategory10).bind(this);
+    super(props)
+    this.state = {active: null}
   }
 
-  hover() {
-    var {height} = this.props
-    var {option, votes, transform} = this.state.hover;
-    var text = `${option}: ${votes}`;
-
-    transform[0] = transform[0] + height / 2
-    transform[1] = transform[1] + height / 2
-    var divStyle = {
-      position: 'absolute',
-      left: transform[0],
-      top: transform[1],
-      pointerEvents: 'none',
+  mouseOver(index, option, votes) {
+    return () => {
+      this.setState({active: index})
+      this.props.setToolTip(true, this.refs['target' + index], option, votes)
     }
-    return (
-        <Tooltip positionLeft = {transform[0]} positionTop = {transform[1]} placement id="tooltip" className="in" style = { {pointerEvents: 'none'} }>
-          {text}
-        </Tooltip>
-    )
   }
 
-  setHover(index, option, votes, transform) {
-    return () => this.setState({hover: {index, option, votes, transform}})
+  mouseOut() {
+    this.setState({active: null})
+    this.props.setToolTip(false)
   }
 
-  deleteHover() {
-    return () => this.setState({hover: {index: null}})
-  }
-
-  renderPie(outerRadius, innerRadius) {
-    var {options} = this.props.voteForm;
+  render() {
+    var {options, outerRadius, innerRadius, colors} = this.props;
 
     const pie = d3.pie()
       .value( d => d.votes)
@@ -49,7 +31,7 @@ class Graph extends Component {
     const path = d3.arc()
       .outerRadius(outerRadius)
       .innerRadius(innerRadius);
-    const label = d3.arc()
+    const pointTooltip = d3.arc()
       .outerRadius(outerRadius + 50)
       .innerRadius(innerRadius);
 
@@ -57,22 +39,32 @@ class Graph extends Component {
       pie(options).map( (partPie, index) => {
         var {option, votes} = partPie.data;
         return (
-          <g key = {'pie' + index} onMouseOver = {this.setHover(index, option, votes, label.centroid(partPie))} onMouseOut = {this.deleteHover()}>
-            <path d = {path(partPie)} fill = {this.color(index)} stroke = 'white' strokeWidth = { (this.state.hover.index === index) ? '2' : '0'}/>
+          <g key = {'pie' + index}>
+            <path d = {path(partPie)} fill = {colors[index]} stroke = {this.state.active === index ? colors[index] : 'white'} onMouseOver = {this.mouseOver(index, option, votes)} onMouseOut = {this.mouseOut.bind(this)}/>
+            <g ref = {'target' + index} transform = {`translate(${pointTooltip.centroid(partPie)})`}>
+              {/* For <Tooltip> need width and heigth. Without these parametrs, it don't work as need */}
+              <rect x = {0} y = {0} width = {1} height = {1} fill = {colors[index]} />
+            </g>
           </g>
         )
       })
     )
   }
+}
 
-  renderLabels() {
-    var {options} = this.props.voteForm;
+class Labels extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    var {options, colors} = this.props;
 
     return (
       options.map( (option, index) => {
         return (
           <g key = {"option" + index} transform = {`translate(${5}, ${index * 20})`}>
-            <rect x = {0} y = {0} width = {10} height = {10} fill = {this.color(index)} />
+            <rect x = {0} y = {0} width = {10} height = {10} fill = {colors[index]} />
             <text  x = {20} y = {10} >{option.option}</text>
           </g>
         )
@@ -80,30 +72,56 @@ class Graph extends Component {
     )
   }
 
+}
+
+class Graph extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      toolTip: {show: false, target: null, option: '', votes: ''},
+    };
+    this.color = d3.scaleOrdinal(d3.schemeCategory10).bind(this);
+  }
+
+  setToolTip(show, ref, option, votes) {
+    if(!show) {
+      var {toolTip} = this.state;
+      toolTip.show = show;
+      this.setState({toolTip})
+    } else {
+      this.setState({toolTip: {show, ref, option, votes}})
+    }
+  }
+
   render () {
-    var {width, height} = this.props;
-    var {options} = this.props.voteForm
+    var {width, height, options} = this.props;
 
     var transformPie = `translate(${height / 2}, ${height / 2})`;
     var transformLabels = `translate(${height + 20}, ${height - options.length * 20 - 10})`
+
+    var colors = new Array(10).fill(undefined).map( (item, index) => {
+      return this.color(index)
+    })
+
+    var {toolTip} = this.state;
 
     return (
       <div style = { {position: 'relative'} }>
         <svg width={width} height={height} id='graph'>
           <g transform = {transformPie}>
-            {this.renderPie(height / 2, 0)}
+            <Pie outerRadius = {height / 2} innerRadius = {0} options = {options} colors = {colors} setToolTip = {this.setToolTip.bind(this)}/>
           </g>
           <g transform = {transformLabels}>
-            {this.renderLabels()}
+            <Labels options = {options} colors = {colors} />
           </g>
         </svg>
-        {this.state.hover.index != null && this.hover() }
+        <Overlay container = {this} placement="top" show = {toolTip.show} target = {toolTip.ref}>
+          <Tooltip id = "tooltip" className="in" style = { {pointerEvents: 'none'} }>{toolTip.option}: {toolTip.votes}</Tooltip>
+        </Overlay>
+
       </div>
     )
   }
 }
 
-const mapStateToProps = ({voteForm}) => {
-  return {voteForm};
-}
-export default connect(mapStateToProps)(Graph);
+export default Graph;

@@ -51,14 +51,15 @@ class VoteForm extends Component {
   }
 
   renderGraph() {
-    var sumVotes = this.props.voteForm.options.reduce( (sum, option) => {
+    var {options} = this.props.voteForm
+    var sumVotes = options.reduce( (sum, option) => {
       return sum + option.votes
     }, 0)
 
     if (sumVotes == 0) return null;
 
     return (
-      <Graph width = {"100%"} height = {300}/>
+      <Graph width = {"100%"} height = {300} options = {options}/>
     )
   }
 
