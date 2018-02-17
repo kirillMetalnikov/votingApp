@@ -9,7 +9,9 @@ var Pool = new Schema({
   options: [{
       option: String,
 			votes: {type: Number, default: 0}
-  }]
+  }],
+	votedUsers: [],
+	votedIPs: []
 });
 
 module.exports = mongoose.model('Pool', Pool);

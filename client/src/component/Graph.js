@@ -31,17 +31,14 @@ class Pie extends Component {
     const path = d3.arc()
       .outerRadius(outerRadius)
       .innerRadius(innerRadius);
-    const pointTooltip = d3.arc()
-      .outerRadius(outerRadius + 50)
-      .innerRadius(innerRadius);
-
+  
     return (
       pie(options).map( (partPie, index) => {
         var {option, votes} = partPie.data;
         return (
           <g key = {'pie' + index}>
-            <path d = {path(partPie)} fill = {colors[index]} stroke = {this.state.active === index ? colors[index] : 'white'} onMouseOver = {this.mouseOver(index, option, votes)} onMouseOut = {this.mouseOut.bind(this)}/>
-            <g ref = {'target' + index} transform = {`translate(${pointTooltip.centroid(partPie)})`}>
+            <path d = {path(partPie)} fill = {colors[index]} stroke = 'white' opacity = {this.state.active === index ? 0.7 : 1} onMouseOver = {this.mouseOver(index, option, votes)} onMouseOut = {this.mouseOut.bind(this)}/>
+            <g ref = {'target' + index} transform = {`translate(${path.centroid(partPie)})`}>
               {/* For <Tooltip> need width and heigth. Without these parametrs, it don't work as need */}
               <rect x = {0} y = {0} width = {1} height = {1} fill = {colors[index]} />
             </g>
@@ -109,7 +106,7 @@ class Graph extends Component {
       <div style = { {position: 'relative'} }>
         <svg width={width} height={height} id='graph'>
           <g transform = {transformPie}>
-            <Pie outerRadius = {height / 2} innerRadius = {0} options = {options} colors = {colors} setToolTip = {this.setToolTip.bind(this)}/>
+            <Pie outerRadius = {height / 2} innerRadius = {height / 4} options = {options} colors = {colors} setToolTip = {this.setToolTip.bind(this)}/>
           </g>
           <g transform = {transformLabels}>
             <Labels options = {options} colors = {colors} />

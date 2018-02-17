@@ -39,7 +39,12 @@ export const addPoll = (values) => dispatch => {
 
 export const submitPoll = (pollID, optionID) => dispatch => {
   axios.put('/api/pools/' + pollID + '/' + optionID).then(res => {
-    dispatch({type: GET_VOTE_FORM, voteForm: res.data});
+    console.log(res);
+    if(res.data.message) {
+      console.log(res.data.message)
+    } else {
+      dispatch({type: GET_VOTE_FORM, voteForm: res.data});
+    }
   })
 }
 

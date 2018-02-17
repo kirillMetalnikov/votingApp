@@ -29,9 +29,11 @@ class Header extends Component {
               </IndexLinkContainer>
             </Nav>
             <Nav pullRight>
-              <NavItem href="/login">
-                Login
-              </NavItem>
+              <IndexLinkContainer to='/login'>
+                <NavItem>
+                  Login
+                </NavItem>
+              </IndexLinkContainer>
             </Nav>
 
         </Navbar>)

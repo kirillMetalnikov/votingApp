@@ -87,6 +87,7 @@ header a ~ p {
 	padding: 7px 5px;
 }
 
+
 .btn p {
 	margin: 8px 0 0 0;
 	padding: 0;
@@ -206,4 +207,48 @@ span {
 /* my */
 .checked {
   background-color: gray;
+}
+
+.login-btn {
+  display: block;
+  width: 225px;
+  padding: 7px 5px;
+  color: white;
+  background-color: #00BCD4;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.login-btn p {
+	margin: 8px 0 0 0;
+	padding: 0;
+}
+
+.login-btn > img {
+	float: left;
+	margin-left: 10px
+}
+
+
+.login-btn:focus {	/* Remove outline when hovering over button */
+	outline: none;
+}
+
+.login-btn:active {	/* Scale the button down by 10% when clicking on button */
+	transform: scale(0.9, 0.9);
+	-webkit-transform: scale(0.9, 0.9);
+	-moz-transform: scale(0.9, 0.9);
 }
