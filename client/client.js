@@ -55940,6 +55940,9 @@ var Header = function (_Component) {
   _createClass(Header, [{
     key: 'render',
     value: function render() {
+      var user = this.props.user;
+
+      var name = user && (user.github ? user.github.displayName || user.github.username : user.google.displayName);
       switch (this.props.user) {
         case undefined:
           return _react2.default.createElement(
@@ -56019,6 +56022,11 @@ var Header = function (_Component) {
             _react2.default.createElement(
               _reactBootstrap.Nav,
               { pullRight: true },
+              _react2.default.createElement(
+                _reactBootstrap.Navbar.Text,
+                null,
+                name
+              ),
               _react2.default.createElement(
                 _reactBootstrap.NavItem,
                 { href: '/logout' },

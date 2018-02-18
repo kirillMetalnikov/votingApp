@@ -6,6 +6,8 @@ import {IndexLinkContainer, LinkContainer} from 'react-router-bootstrap'
 
 class Header extends Component {
   render() {
+    const {user} = this.props
+    const name = user && ( user.github ? user.github.displayName || user.github.username : user.google.displayName)
     switch (this.props.user) {
       case undefined:
         return (
@@ -53,6 +55,9 @@ class Header extends Component {
               </IndexLinkContainer>
             </Nav>
             <Nav pullRight>
+              <Navbar.Text>
+                {name}
+              </Navbar.Text>
               <NavItem href="/logout">
                 Logout
               </NavItem>
