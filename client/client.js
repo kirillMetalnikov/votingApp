@@ -71230,33 +71230,41 @@ var Login = function (_Component) {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
-        _reactBootstrap.Row,
+        'div',
         null,
         _react2.default.createElement(
-          'a',
-          { href: '/auth/github' },
+          'div',
+          { style: { margin: '5px' } },
           _react2.default.createElement(
-            'div',
-            { className: 'btn login-btn' },
-            _react2.default.createElement('img', { src: '/public/img/github_32px.png', alt: 'github logo' }),
+            'a',
+            { href: '/auth/github' },
             _react2.default.createElement(
-              'p',
-              null,
-              'LOGIN WITH GITHUB'
+              'div',
+              { className: 'btn login-btn' },
+              _react2.default.createElement('img', { src: '/public/img/github_32px.png', alt: 'github logo' }),
+              _react2.default.createElement(
+                'p',
+                null,
+                'LOGIN WITH GITHUB'
+              )
             )
           )
         ),
         _react2.default.createElement(
-          'a',
-          { href: '/auth/google' },
+          'div',
+          { style: { margin: '5px' } },
           _react2.default.createElement(
-            'div',
-            { className: 'btn login-btn' },
-            _react2.default.createElement('img', { src: '/public/img/google_32px.png', alt: 'google logo' }),
+            'a',
+            { href: '/auth/google' },
             _react2.default.createElement(
-              'p',
-              null,
-              'LOGIN WITH GOOGLE'
+              'div',
+              { className: 'btn login-btn' },
+              _react2.default.createElement('img', { src: '/public/img/google_32px.png', alt: 'google logo' }),
+              _react2.default.createElement(
+                'p',
+                null,
+                'LOGIN WITH GOOGLE'
+              )
             )
           )
         )
