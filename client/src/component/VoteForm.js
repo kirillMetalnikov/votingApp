@@ -41,7 +41,7 @@ class VoteForm extends Component {
   renderButton() {
     var {user, voteForm}  = this.props;
     if (!user) user = {_id: null};
-    if(user._id != voteForm.owner) return <Button type ="submit" bsStyle="primary">Vote</Button>
+    if(user._id != voteForm.owner) return <Button type ="submit" bsStyle="primary" disabled = { this.state.checked == null}>Vote</Button>
   }
 
   renderDeleteButton() {
@@ -81,7 +81,7 @@ class VoteForm extends Component {
                     onClick = {this.handleCheck(option._id)}
                     active = {this.state.checked == option._id && ( this.props.user ? this.props.user._id != this.props.voteForm.owner : true)}
                   >
-                    {option.option}: <span className="pull-right"><strong>{option.votes}</strong></span>
+                    {option.option}
                   </ListGroupItem>
                 )
               })}

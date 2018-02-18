@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {GET_CURRENT_USER, GET_POLLS, GET_VOTE_FORM, GET_USER_POLLS, IS_NEW_POLL} from '../const.js'
+import {GET_CURRENT_USER, GET_POLLS, GET_VOTE_FORM, GET_USER_POLLS, IS_NEW_POLL, GET_MESSAGE} from '../const.js'
 
 export const getCurrentUser = () => dispatch => {
   axios.get('/api/current_user').then(res => {
@@ -39,13 +39,17 @@ export const addPoll = (values) => dispatch => {
 
 export const submitPoll = (pollID, optionID) => dispatch => {
   axios.put('/api/pools/' + pollID + '/' + optionID).then(res => {
-    console.log(res);
     if(res.data.message) {
-      console.log(res.data.message)
+      dispatch({type: GET_MESSAGE, message: res.data.message});
     } else {
       dispatch({type: GET_VOTE_FORM, voteForm: res.data});
     }
   })
+}
+
+export const resetMessage = () => dispatch => {
+  console.log('resetMessage')
+  dispatch({type: GET_MESSAGE, message: ''});
 }
 
 export const userPolls = (userID) => dispatch => {

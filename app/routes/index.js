@@ -50,7 +50,7 @@ module.exports = function (app, passport) {
 
 	app.route('/auth/github/callback')
 		.get(passport.authenticate('github', {
-			successRedirect: '/',
+			successRedirect: '/dashboard',
 			failureRedirect: '/login'
 		}));
 
@@ -59,7 +59,7 @@ module.exports = function (app, passport) {
 
 		app.route('/auth/google/callback')
 			.get(passport.authenticate('google', {
-				successRedirect: '/',
+				successRedirect: '/dashboard',
 				failureRedirect: '/login'
 			}))
 /*	app.route('/api/:id/clicks')

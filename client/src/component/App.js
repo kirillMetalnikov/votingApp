@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import {Grid, Row} from 'react-bootstrap';
 
 import Header from './Header.js';
+import Message from './Message.js'
 import ListVotes from './ListVotes.js';
 import DashBoard from './DashBoard.js';
 import NewPoll from './NewPoll.js';
@@ -25,6 +26,7 @@ class App extends Component {
           <div>
             <Row>
               <Header/>
+              <Message/>
             </Row>
             <Route exact path='/' component={ListVotes} />
             <Route exact path='/poll/:id' component={VoteForm} />
