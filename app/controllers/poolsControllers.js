@@ -45,7 +45,7 @@ function PoolsHandler () {
 				if (err) { throw err; }
 				if(result.votedIPs.indexOf(ip) != -1) {
 					res.json({message: "You have voted from this IP"})
-				} else if (userID && result.votedUsers.indexOf(userID) != -1)  {
+				} else if (userID != 'anonymous' && result.votedUsers.indexOf(userID) != -1)  {
 					res.json({message: "You have voted"})
 				} else {
 					Pools
